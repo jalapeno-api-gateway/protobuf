@@ -1,0 +1,8 @@
+syntax = "proto3";
+package requestservice;
+
+message MultiTopologyIdentifier {
+    bool OFlag = 1;
+    bool AFlag = 2;
+    uint32 MTID = 3; // protobuf does not support uint16
+}
