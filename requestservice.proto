@@ -1,13 +1,13 @@
 syntax = "proto3";
-package requestservice;
+package protobuf;
 
-option go_package = "github.com/jalapeno-api-gateway/protobuf/requestservice";
-
-import "model/topology.proto";
+import "topology.proto";
 
 service RequestService {
-    rpc GetLsNodes(TopologyRequest) returns (LsNodeResponse) {}
-    rpc GetLsLinks(TopologyRequest) returns (LsLinkResponse) {}
+    rpc GetLSNodes(TopologyRequest) returns (LsNodeResponse) {}
+    rpc GetLSLinks(TopologyRequest) returns (LsLinkResponse) {}
+    rpc GetLSPrefix(TopologyRequest) returns (LsLinkResponse) {}
+    rpc GetLSSRv6SID(TopologyRequest) returns (LsLinkResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
 }
 
@@ -22,11 +22,11 @@ message TelemetryRequest {
 }
 
 message LsNodeResponse {
-    repeated model.LSNode lsNodes = 1;
+    repeated LSNode lsNodes = 1;
 }
 
 message LsLinkResponse {
-    repeated model.LSLink lsLinks = 1;
+    repeated LSLink lsLinks = 1;
 }
 
 message TelemetryResponse {

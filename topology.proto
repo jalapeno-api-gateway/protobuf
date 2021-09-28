@@ -1,9 +1,7 @@
 syntax = "proto3";
-package model;
+package protobuf;
 
-option go_package = "github.com/jalapeno-api-gateway/protobuf/model";
-
-import "model/base.proto";
+import "base.proto";
 
 message LSNode {
 	string Key = 1;
