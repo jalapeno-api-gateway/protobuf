@@ -1,5 +1,7 @@
 syntax = "proto3";
-package requestservice;
+package model;
+
+option go_package = "github.com/jalapeno-api-gateway/protobuf/model";
 
 message MultiTopologyIdentifier {
     bool OFlag = 1;

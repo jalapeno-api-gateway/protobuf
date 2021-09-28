@@ -1,6 +1,8 @@
 syntax = "proto3";
 package requestservice;
 
+option go_package = "github.com/jalapeno-api-gateway/protobuf/requestservice";
+
 import "model/topology.proto";
 
 service RequestService {
@@ -20,11 +22,11 @@ message TelemetryRequest {
 }
 
 message LsNodeResponse {
-    repeated LSNode lsNodes = 1;
+    repeated model.LSNode lsNodes = 1;
 }
 
 message LsLinkResponse {
-    repeated LSLink lsLinks = 1;
+    repeated model.LSLink lsLinks = 1;
 }
 
 message TelemetryResponse {
