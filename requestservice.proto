@@ -44,4 +44,8 @@ message TelemetryResponse {
 message TelemetryData {
     required string ipv4address = 1;
     optional int64 dataRate = 2;
+    optional int64 packetsSent = 3;
+    optional int64 packetsReceived = 4;
+    optional string state = 5;
+    optional int64 lastStateTransitionTime = 6;
 }
