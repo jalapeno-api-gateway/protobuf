@@ -1,0 +1,55 @@
+syntax = "proto2";
+package protobuf;
+
+import "topology.proto";
+
+service SubscriptionService {
+    rpc SubscribeToLSNodes(TopologySubscription) returns (stream LSNodeEvent) {}
+    rpc SubscribeToLSLinks(TopologySubscription) returns (stream LSLinkEvent) {}
+    rpc SubscribeToLSPrefix(TopologySubscription) returns (stream LSPrefixEvent) {}
+    rpc SubscribeToLSSRv6SID(TopologySubscription) returns (stream LSSRv6SIDEvent) {}
+    rpc SubscribeToTelemetryData(TelemetrySubscription) returns (stream TelemetryEvent) {}
+}
+
+message TopologySubscription {
+    repeated string keys = 1;
+    repeated string propertyNames = 2;
+}
+
+message TelemetrySubscription {
+    repeated string ipv4addresses = 1;
+    repeated string propertyNames = 2;
+}
+
+message LSNodeEvent {
+    required string action = 1;
+    required string key = 2;
+    required LSNode lsNode = 3;
+}
+
+message LSLinkEvent {
+    required string action = 1;
+    required string key = 2;
+    required LSLink lsLink = 3;
+}
+
+message LSPrefixEvent {
+    required string action = 1;
+    required string key = 2;
+    required LSPrefix lsPrefix = 3;
+}
+
+message LSSRv6SIDEvent {
+    required string action = 1;
+    required string key = 2;
+    required LSSRv6SID lsSRv6SID = 3;
+}
+
+message TelemetryEvent {
+    required string ipv4address = 1;
+    optional int64 dataRate = 2;
+    optional int64 packetsSent = 3;
+    optional int64 packetsReceived = 4;
+    optional string state = 5;
+    optional int64 lastStateTransitionTime = 6;
+}

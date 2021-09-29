@@ -1,13 +1,13 @@
-syntax = "proto3";
+syntax = "proto2";
 package protobuf;
 
 import "topology.proto";
 
 service RequestService {
-    rpc GetLSNodes(TopologyRequest) returns (LsNodeResponse) {}
-    rpc GetLSLinks(TopologyRequest) returns (LsLinkResponse) {}
-    rpc GetLSPrefix(TopologyRequest) returns (LsLinkResponse) {}
-    rpc GetLSSRv6SID(TopologyRequest) returns (LsLinkResponse) {}
+    rpc GetLSNodes(TopologyRequest) returns (LSNodeResponse) {}
+    rpc GetLSLinks(TopologyRequest) returns (LSLinkResponse) {}
+    rpc GetLSPrefix(TopologyRequest) returns (LSPrefixResponse) {}
+    rpc GetLSSRv6SID(TopologyRequest) returns (LSSRv6SIDResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
 }
 
@@ -21,12 +21,20 @@ message TelemetryRequest {
     repeated string propertyNames = 2;
 }
 
-message LsNodeResponse {
+message LSNodeResponse {
     repeated LSNode lsNodes = 1;
 }
 
-message LsLinkResponse {
+message LSLinkResponse {
     repeated LSLink lsLinks = 1;
+}
+
+message LSPrefixResponse {
+    repeated LSPrefix lsPrefixes = 1;
+}
+
+message LSSRv6SIDResponse {
+    repeated LSSRv6SID lsSRv6SIDs = 1;
 }
 
 message TelemetryResponse {
@@ -34,6 +42,6 @@ message TelemetryResponse {
 }
 
 message TelemetryData {
-    string ipv4address = 1;
+    required string ipv4address = 1;
     optional int64 dataRate = 2;
 }
