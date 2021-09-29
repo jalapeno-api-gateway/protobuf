@@ -24,25 +24,25 @@ message TelemetrySubscription {
 message LSNodeEvent {
     required string action = 1;
     required string key = 2;
-    required LSNode lsNode = 3;
+    optional LSNode lsNode = 3;
 }
 
 message LSLinkEvent {
     required string action = 1;
     required string key = 2;
-    required LSLink lsLink = 3;
+    optional LSLink lsLink = 3;
 }
 
 message LSPrefixEvent {
     required string action = 1;
     required string key = 2;
-    required LSPrefix lsPrefix = 3;
+    optional LSPrefix lsPrefix = 3;
 }
 
 message LSSRv6SIDEvent {
     required string action = 1;
     required string key = 2;
-    required LSSRv6SID lsSRv6SID = 3;
+    optional LSSRv6SID lsSRv6SID = 3;
 }
 
 message TelemetryEvent {
