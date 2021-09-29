@@ -6,8 +6,8 @@ import "topology.proto";
 service SubscriptionService {
     rpc SubscribeToLSNodes(TopologySubscription) returns (stream LSNodeEvent) {}
     rpc SubscribeToLSLinks(TopologySubscription) returns (stream LSLinkEvent) {}
-    rpc SubscribeToLSPrefix(TopologySubscription) returns (stream LSPrefixEvent) {}
-    rpc SubscribeToLSSRv6SID(TopologySubscription) returns (stream LSSRv6SIDEvent) {}
+    rpc SubscribeToLSPrefixes(TopologySubscription) returns (stream LSPrefixEvent) {}
+    rpc SubscribeToLSSRv6SIDs(TopologySubscription) returns (stream LSSRv6SIDEvent) {}
     rpc SubscribeToTelemetryData(TelemetrySubscription) returns (stream TelemetryEvent) {}
 }
 
