@@ -6,8 +6,8 @@ import "topology.proto";
 service RequestService {
     rpc GetLSNodes(TopologyRequest) returns (LSNodeResponse) {}
     rpc GetLSLinks(TopologyRequest) returns (LSLinkResponse) {}
-    rpc GetLSPrefix(TopologyRequest) returns (LSPrefixResponse) {}
-    rpc GetLSSRv6SID(TopologyRequest) returns (LSSRv6SIDResponse) {}
+    rpc GetLSPrefixes(TopologyRequest) returns (LSPrefixResponse) {}
+    rpc GetLSSRv6SIDs(TopologyRequest) returns (LSSRv6SIDResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
 }
 
