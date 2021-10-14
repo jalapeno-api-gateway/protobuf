@@ -4,6 +4,7 @@ name: create_releases_for_compiled_repos
 
 on:
   release:
+    types: [published]
   
 jobs:
   release-go:
@@ -13,14 +14,10 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          owner: 'jalapeno-api-gateway'
-          repo: 'protorepo-jagw-go'
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+        env:
+          GITHUB_REPOSITORY: jalapeno-api-gateway/protorepo-jagw-go
