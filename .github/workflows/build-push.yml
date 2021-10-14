@@ -29,10 +29,9 @@ jobs:
 
       - name: Build
         run: |
-          ls -a
           mkdir -p jagw
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
-          ls jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
+          cp readme-compiled/go-readme.md jagw/github.com/jalapeno-api-gateway/protobuf/jagw/README.md
 
       - name: Push
         uses: cpina/github-action-push-to-another-repository@main
