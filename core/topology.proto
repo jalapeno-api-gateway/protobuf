@@ -1,0 +1,95 @@
+syntax = "proto2";
+package jagw;
+
+option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
+
+import "core/base.proto";
+
+message LSNode {
+	required string Key = 1;
+	optional string ID = 2;
+	optional string RouterHash = 3;
+	optional int64 DomainID = 4;
+	optional string RouterIP = 5;
+	optional string PeerHash = 6;
+	optional string PeerIP = 7;
+	optional int32 PeerASN = 8;
+	optional string Timestamp = 9;
+	optional string IGPRouterID = 10;
+	optional uint32 ASN = 11;
+	repeated MultiTopologyIdentifier MTID = 12;
+	optional string AreaID = 13;
+	optional string Protocol = 14;
+	optional uint32 ProtocolID = 15; // protobuf does not support uint8
+	optional string Name = 16;
+	optional bool IsPrepolicy = 17;
+	optional bool IsAdjRIBIn = 18;
+}
+
+message LSLink {
+	required string Key = 1;
+	optional string ID = 2;
+	optional string RouterHash = 3;
+	optional string RouterIP = 4;
+	optional int64 DomainID = 5;
+	optional string PeerHash = 6;
+	optional string PeerIP = 7;
+	optional int32 PeerASN = 8;
+	optional string Timestamp = 9;
+	optional string IGPRouterID = 10;
+	optional string Protocol = 11;
+	optional string AreaID = 12;
+	optional string Nexthop = 13;
+	optional MultiTopologyIdentifier MTID = 14;
+	optional string LocalLinkIP = 15;
+	optional string RemoteLinkIP = 16;
+	optional uint32 IGPMetric = 17;
+	optional string RemoteNodeHash = 18;
+	optional string LocalNodeHash = 19;
+	optional string RemoteIGPRouterID = 20;
+}
+
+message LSPrefix {
+	required string Key = 1;
+	optional string ID = 2;
+	optional string RouterHash = 3;
+	optional string RouterIP = 4;
+	optional int64 DomainID = 5;
+	optional string PeerHash = 6;
+	optional string PeerIP = 7;
+	optional int32 PeerASN = 8;
+	optional string Timestamp = 9;
+	optional string IGPRouterID = 10;
+	optional string Protocol = 11;
+	optional string AreaID = 12;
+	optional string Nexthop = 13;
+	optional string LocalNodeHash = 14;
+	optional MultiTopologyIdentifier MTID = 15;
+	optional string Prefix = 16;
+	optional int32 PrefixLen = 17;
+	optional uint32 PrefixMetric = 18;
+	optional bool IsPrepolicy = 19;
+	optional bool IsAdjRIBIn = 20;
+}
+
+message LSSRv6SID {
+	required string Key = 1;
+	optional string ID = 2;
+	optional string RouterHash = 3;
+	optional string RouterIP = 4;
+	optional int64 DomainID = 5;
+	optional string PeerHash = 6;
+	optional string PeerIP = 7;
+	optional int32 PeerASN = 8;
+	optional string Timestamp = 9;
+	optional string IGPRouterID = 10;
+	optional uint32 LocalNodeASN = 11;
+	optional string Protocol = 12;
+	optional string Nexthop = 13;
+	optional string LocalNodeHash = 14;
+	optional MultiTopologyIdentifier MTID = 15;
+	optional uint32 IGPFlags = 16; // protobuf does not support uint8
+	optional bool IsPrepolicy = 17;
+	optional bool IsAdjRIBIn = 18;
+	optional string SRv6SID = 19;
+}

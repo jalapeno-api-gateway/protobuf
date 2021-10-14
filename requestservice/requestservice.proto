@@ -1,0 +1,53 @@
+syntax = "proto2";
+package jagw;
+
+option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
+
+import "core/topology.proto";
+
+service RequestService {
+    rpc GetLSNodes(TopologyRequest) returns (LSNodeResponse) {}
+    rpc GetLSLinks(TopologyRequest) returns (LSLinkResponse) {}
+    rpc GetLSPrefixes(TopologyRequest) returns (LSPrefixResponse) {}
+    rpc GetLSSRv6SIDs(TopologyRequest) returns (LSSRv6SIDResponse) {}
+    rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
+}
+
+message TopologyRequest {
+    repeated string keys = 1;
+    repeated string propertyNames = 2;
+}
+
+message TelemetryRequest {
+    repeated string ipv4addresses = 1;
+    repeated string propertyNames = 2;
+}
+
+message LSNodeResponse {
+    repeated LSNode lsNodes = 1;
+}
+
+message LSLinkResponse {
+    repeated LSLink lsLinks = 1;
+}
+
+message LSPrefixResponse {
+    repeated LSPrefix lsPrefixes = 1;
+}
+
+message LSSRv6SIDResponse {
+    repeated LSSRv6SID lsSRv6SIDs = 1;
+}
+
+message TelemetryResponse {
+    repeated TelemetryData telemetryData = 1;
+}
+
+message TelemetryData {
+    required string ipv4address = 1;
+    optional int64 dataRate = 2;
+    optional int64 packetsSent = 3;
+    optional int64 packetsReceived = 4;
+    optional string state = 5;
+    optional int64 lastStateTransitionTime = 6;
+}
