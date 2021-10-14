@@ -21,3 +21,4 @@ jobs:
           token: ${{ secrets.API_TOKEN_ALLOW_ALL }}
         env:
           GITHUB_REPOSITORY: 'jalapeno-api-gateway/protorepo-jagw-go'
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN_ALLOW_ALL }}
