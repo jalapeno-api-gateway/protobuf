@@ -29,6 +29,7 @@ jobs:
 
       - name: Build
         run: |
+          ls -a
           mkdir -p jagw
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
           ls jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
