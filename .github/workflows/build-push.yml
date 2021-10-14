@@ -33,3 +33,15 @@ jobs:
           mkdir -p jagw
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
           ls jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
+
+      - name: Push
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'jagw/github.com/jalapeno-api-gateway/protobuf/jagw/'
+          destination-github-username: 'jalapeno-api-gateway'
+          destination-repository-name: 'protorepo-jagw-go'
+          user-email: michel_bongard@hotmail.com
+          target-branch: main
+          commit-message: 'updating protobuf definitions'
