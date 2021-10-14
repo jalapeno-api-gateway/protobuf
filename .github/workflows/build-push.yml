@@ -1,0 +1,35 @@
+name: build_and_push
+
+on:
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-go:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.2'
+      - uses: arduino/setup-protoc@v1.1.2
+        with:
+          version: '3.6.1'
+      
+      - name: Install go compiler for gRPC
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+          export PATH="$PATH:$(go env GOPATH)/bin"
+
+      - name: Build
+        run: |
+          ls -a
+          mkdir -p jagw
+          protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
+          ls jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
