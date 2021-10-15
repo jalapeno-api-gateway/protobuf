@@ -44,3 +44,34 @@ jobs:
           user-email: michel_bongard@hotmail.com
           target-branch: main
           commit-message: 'updating protobuf definitions'
+  build-node:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - uses: arduino/setup-protoc@v1.1.2
+        with:
+          version: '3.6.1'
+      
+      - name: Install node compiler for gRPC
+        run: npm install -g grpc-tools
+
+      - name: Build
+        run: |
+          mkdir -p jagw
+          grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw *.proto    
+
+      - name: Push
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: 'jagw/'
+          destination-github-username: 'jalapeno-api-gateway'
+          destination-repository-name: 'protorepo-jagw-node'
+          user-email: michel_bongard@hotmail.com
+          target-branch: main
+          commit-message: 'updating protobuf definitions'
