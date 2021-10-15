@@ -61,6 +61,7 @@ jobs:
 
       - name: Build
         run: |
+          ls jagw
           mkdir -p jagw
           ls jagw
           grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw $(find . -iname "*.proto")    
