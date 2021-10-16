@@ -7,14 +7,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  checkout-code:
+  build-go:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-  build-go:
-    needs: checkout-code
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17.2'
@@ -43,7 +39,6 @@ jobs:
           target-branch: main
           commit-message: 'updating protobuf definitions'
   build-node:
-    needs: checkout-code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -57,6 +52,8 @@ jobs:
         run: npm install -g grpc-tools
       - name: Build
         run: |
+          go version
+          ls -a
           mkdir -p jagw-node
           grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw-node --grpc_out=grpc_js:jagw-node $(find . -iname "*.proto")
           cp readme-compiled/node-readme.md jagw-node/README.md
