@@ -61,11 +61,11 @@ jobs:
 
       - name: Build
         run: |
+          pwd
+          go version
           ls jagw
           mkdir -p jagw
-          ls jagw
-          grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw $(find . -iname "*.proto")    
-          ls jagw
+          grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw $(find . -iname "*.proto")
 
       - name: Push
         uses: cpina/github-action-push-to-another-repository@main
