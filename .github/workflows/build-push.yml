@@ -44,6 +44,7 @@ jobs:
           user-email: michel_bongard@hotmail.com
           target-branch: main
           commit-message: 'updating protobuf definitions'
+
   build-node:
     runs-on: ubuntu-latest
 
