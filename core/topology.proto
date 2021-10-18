@@ -92,6 +92,6 @@ message LsSrv6Sid {
 	optional MultiTopologyIdentifier mtid = 15;
 	optional uint32 igp_flags = 16; // protobuf does not support uint8
 	optional bool is_prepolicy = 17;
-	optional bool is_adjrib_in = 18;
+	optional bool is_adj_rib_in = 18;
 	optional string srv6_sid = 19;
 }
