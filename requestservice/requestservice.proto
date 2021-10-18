@@ -4,50 +4,52 @@ package jagw;
 option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
 
 import "core/topology.proto";
+import "core/base.proto";
 
 service RequestService {
-    rpc GetLSNodes(TopologyRequest) returns (LSNodeResponse) {}
-    rpc GetLSLinks(TopologyRequest) returns (LSLinkResponse) {}
-    rpc GetLSPrefixes(TopologyRequest) returns (LSPrefixResponse) {}
-    rpc GetLSSRv6SIDs(TopologyRequest) returns (LSSRv6SIDResponse) {}
+    rpc GetLsNodes(TopologyRequest) returns (LsNodeResponse) {}
+    rpc GetLsLinks(TopologyRequest) returns (LsLinkResponse) {}
+    rpc GetLsPrefixes(TopologyRequest) returns (LsPrefixResponse) {}
+    rpc GetLsSrv6Sids(TopologyRequest) returns (LsSrv6SidResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
 }
 
 message TopologyRequest {
     repeated string keys = 1;
-    repeated string propertyNames = 2;
+    repeated string property_names = 2;
 }
 
 message TelemetryRequest {
-    repeated string ipv4addresses = 1;
-    repeated string propertyNames = 2;
+    repeated InterfaceIdentifier interface_ids = 1;
+    repeated string property_names = 2;
 }
 
-message LSNodeResponse {
-    repeated LSNode lsNodes = 1;
+message LsNodeResponse {
+    repeated LsNode ls_nodes = 1;
 }
 
-message LSLinkResponse {
-    repeated LSLink lsLinks = 1;
+message LsLinkResponse {
+    repeated LsLink ls_links = 1;
 }
 
-message LSPrefixResponse {
-    repeated LSPrefix lsPrefixes = 1;
+message LsPrefixResponse {
+    repeated LsPrefix ls_prefixes = 1;
 }
 
-message LSSRv6SIDResponse {
-    repeated LSSRv6SID lsSRv6SIDs = 1;
+message LsSrv6SidResponse {
+    repeated LsSrv6Sid ls_srv6_sids = 1;
 }
 
 message TelemetryResponse {
-    repeated TelemetryData telemetryData = 1;
+    repeated TelemetryData telemetry_data = 1;
 }
 
 message TelemetryData {
-    required string ipv4address = 1;
-    optional int64 dataRate = 2;
-    optional int64 packetsSent = 3;
-    optional int64 packetsReceived = 4;
-    optional string state = 5;
-    optional int64 lastStateTransitionTime = 6;
+    required InterfaceIdentifier interface_id = 1;
+    optional string ipv4_address = 2;
+    optional int64 data_rate = 3;
+    optional int64 packets_sent = 4;
+    optional int64 packets_received = 5;
+    optional string state = 6;
+    optional int64 last_state_transition_time = 7;
 }

@@ -4,54 +4,56 @@ package jagw;
 option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
 
 import "core/topology.proto";
+import "core/base.proto";
 
 service SubscriptionService {
-    rpc SubscribeToLSNodes(TopologySubscription) returns (stream LSNodeEvent) {}
-    rpc SubscribeToLSLinks(TopologySubscription) returns (stream LSLinkEvent) {}
-    rpc SubscribeToLSPrefixes(TopologySubscription) returns (stream LSPrefixEvent) {}
-    rpc SubscribeToLSSRv6SIDs(TopologySubscription) returns (stream LSSRv6SIDEvent) {}
+    rpc SubscribeToLsNodes(TopologySubscription) returns (stream LsNodeEvent) {}
+    rpc SubscribeToLsLinks(TopologySubscription) returns (stream LsLinkEvent) {}
+    rpc SubscribeToLsPrefixes(TopologySubscription) returns (stream LsPrefixEvent) {}
+    rpc SubscribeToLsSrv6Sids(TopologySubscription) returns (stream LsSrv6SidEvent) {}
     rpc SubscribeToTelemetryData(TelemetrySubscription) returns (stream TelemetryEvent) {}
 }
 
 message TopologySubscription {
     repeated string keys = 1;
-    repeated string propertyNames = 2;
+    repeated string property_names = 2;
 }
 
 message TelemetrySubscription {
-    repeated string ipv4addresses = 1;
-    repeated string propertyNames = 2;
+    repeated InterfaceIdentifier interface_ids = 1;
+    repeated string property_names = 2;
 }
 
-message LSNodeEvent {
+message LsNodeEvent {
     required string action = 1;
     required string key = 2;
-    optional LSNode lsNode = 3;
+    optional LsNode ls_node = 3;
 }
 
-message LSLinkEvent {
+message LsLinkEvent {
     required string action = 1;
     required string key = 2;
-    optional LSLink lsLink = 3;
+    optional LsLink ls_link = 3;
 }
 
-message LSPrefixEvent {
+message LsPrefixEvent {
     required string action = 1;
     required string key = 2;
-    optional LSPrefix lsPrefix = 3;
+    optional LsPrefix ls_prefix = 3;
 }
 
-message LSSRv6SIDEvent {
+message LsSrv6SidEvent {
     required string action = 1;
     required string key = 2;
-    optional LSSRv6SID lsSRv6SID = 3;
+    optional LsSrv6Sid ls_srv6_sid = 3;
 }
 
 message TelemetryEvent {
-    required string ipv4address = 1;
-    optional int64 dataRate = 2;
-    optional int64 packetsSent = 3;
-    optional int64 packetsReceived = 4;
-    optional string state = 5;
-    optional int64 lastStateTransitionTime = 6;
+    required InterfaceIdentifier interface_id = 1;
+    optional string ipv4_address = 2;
+    optional int64 data_rate = 3;
+    optional int64 packets_sent = 4;
+    optional int64 packets_received = 5;
+    optional string state = 6;
+    optional int64 last_state_transition_time = 7;
 }
