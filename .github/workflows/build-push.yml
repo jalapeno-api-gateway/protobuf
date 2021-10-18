@@ -28,20 +28,20 @@ jobs:
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
       - name: Initialize Module
         run: |
-          cd jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
+          cd jagw/github.com/jalapeno-api-gateway/protobuf/
           go mod init github.com/jalapeno-api-gateway/protorepo-jagw-go
           go mod tidy
-          cd ../../../../..
+          cd ../../../..
       - name: Create README
         run: |
-          echo "# protorepo-jagw-go" >> jagw/github.com/jalapeno-api-gateway/protobuf/jagw/README.md
-          echo "This repository contains the compiled code for the Jalapeño API Gateway for **golang**." >> jagw/github.com/jalapeno-api-gateway/protobuf/jagw/README.md
+          echo "# protorepo-jagw-go" >> jagw/github.com/jalapeno-api-gateway/protobuf/README.md
+          echo "This repository contains the compiled code for the Jalapeño API Gateway for **golang**." >> jagw/github.com/jalapeno-api-gateway/protobuf/README.md
       - name: Push
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: 'jagw/github.com/jalapeno-api-gateway/protobuf/jagw/'
+          source-directory: 'jagw/github.com/jalapeno-api-gateway/protobuf/'
           destination-github-username: 'jalapeno-api-gateway'
           destination-repository-name: 'protorepo-jagw-go'
           user-email: michel_bongard@hotmail.com
