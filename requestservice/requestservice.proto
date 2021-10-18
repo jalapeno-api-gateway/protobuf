@@ -42,7 +42,7 @@ message LsSrv6SidResponse {
 }
 
 message LsNodeEdgeResponse {
-    repeated LsNodeEdge ls_node_edge = 1;
+    repeated LsNodeEdge ls_node_edges = 1;
 }
 
 message TelemetryResponse {
