@@ -29,7 +29,7 @@ jobs:
       - name: Initialize Module
         run: |
           cd jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
-          go mod init
+          go mod init github.com/jalapeno-api-gateway/protorepo-jagw-go
           go mod tidy
           cd ../../../../..
       - name: Create README
