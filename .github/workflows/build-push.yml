@@ -26,6 +26,12 @@ jobs:
         run: |
           mkdir -p jagw
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
+      - name: Initialize Module
+        run: |
+          cd jagw/github.com/jalapeno-api-gateway/protobuf/jagw/
+          go mod init
+          go mod tidy
+          cd ../../../../..
       - name: Create README
         run: |
           echo "# protorepo-jagw-go" >> jagw/github.com/jalapeno-api-gateway/protobuf/jagw/README.md
