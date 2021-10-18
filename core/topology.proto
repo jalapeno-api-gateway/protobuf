@@ -95,3 +95,11 @@ message LsSrv6Sid {
 	optional bool is_adj_rib_in = 18;
 	optional string srv6_sid = 19;
 }
+
+message LsNodeEdge {
+	required string key = 1;
+	optional string id = 2;
+	optional string from = 3;
+	optional string to = 4;
+	optional string link = 5;
+}
