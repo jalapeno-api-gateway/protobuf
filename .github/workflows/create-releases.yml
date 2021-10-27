@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: create_releases_for_compiled_repos
 
 on:
