@@ -13,6 +13,7 @@ service RequestService {
     rpc GetLsSrv6Sids(TopologyRequest) returns (LsSrv6SidResponse) {}
     rpc GetLsNodeEdges(TopologyRequest) returns (LsNodeEdgeResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
+    rpc GetTelemetryDataRange(TelemetryRangeRequest) returns (TelemetryRangeResponse) {}
 }
 
 message TopologyRequest {
@@ -23,6 +24,13 @@ message TopologyRequest {
 message TelemetryRequest {
     repeated InterfaceIdentifier interface_ids = 1;
     repeated string property_names = 2;
+}
+
+message TelemetryRangeRequest {
+    repeated InterfaceIdentifier interface_ids = 1;
+    repeated string property_names = 2;
+    optional int64 earliest_timestamp = 3;
+    optional int64 latest_timestamp = 4;
 }
 
 message LsNodeResponse {
@@ -49,6 +57,10 @@ message TelemetryResponse {
     repeated TelemetryData telemetry_data = 1;
 }
 
+message TelemetryRangeResponse {
+    repeated TelemetryData telemetry_data = 1;
+}
+
 message TelemetryData {
     required InterfaceIdentifier interface_id = 1;
     optional string ipv4_address = 2;
@@ -57,4 +69,5 @@ message TelemetryData {
     optional int64 packets_received = 5;
     optional string state = 6;
     optional int64 last_state_transition_time = 7;
+    optional int64 timestamp = 8;
 }
