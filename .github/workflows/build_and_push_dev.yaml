@@ -50,15 +50,19 @@ jobs:
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           cd ..
         id: get_branch
-      - name: Push
+      - name: Prepare remote repo
         run: |
           cd protorepo-jagw-go
           git init
           git config user.email "michel_bongard@hotmail.com"
           git config user.name "mbongard"
-          git remote add deploy "git@github.com/jalapeno-api-gateway/protorepo-jagw-go"
+          git remote add deploy "https://mbongard:github.com/jalapeno-api-gateway/protorepo-jagw-go"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
           cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
           git add .
           git commit -am "updating protobuf definitions"
-          git push deploy dev-${{ steps.get_branch.outputs.branch }} --force
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev-${{ steps.get_branch.outputs.branch }}
