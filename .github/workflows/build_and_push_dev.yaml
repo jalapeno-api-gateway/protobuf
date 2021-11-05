@@ -56,7 +56,7 @@ jobs:
           git init
           git remote add deploy "git@github.com/jalapeno-api-gateway/protorepo-jagw-go"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
-          cp ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
+          cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
           git add .
           git commit -am "updating protobuf definitions"
           git push deploy dev-${{ steps.get_branch.outputs.branch }} --force
