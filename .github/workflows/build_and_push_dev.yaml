@@ -9,9 +9,19 @@ on:
 
 jobs:
   build-go:
+    env:
+      working-directory: /temp/go
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout protorepo
+        uses: actions/checkout@v2
+        with:
+          path: ${{env.working-directory}}/protorepo
+      - name: Checkout protorepo-jagw-go
+        uses: actions/checkout@v2
+        with:
+          repository: jalapeno-api-gateway/protorepo-jagw-go
+          path: ${{env.working-directory}}/protorepo-jagw-go
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17.2'
@@ -25,24 +35,32 @@ jobs:
           export PATH="$PATH:$(go env GOPATH)/bin"
       - name: Build
         run: |
+          cd ${{env.working-directory}}/protorepo
           mkdir -p jagw
           protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
       - name: Initialize Module
         run: |
-          cd jagw/github.com/jalapeno-api-gateway/protobuf/
+          cd ${{env.working-directory}}/protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/
           go mod init github.com/jalapeno-api-gateway/protorepo-jagw-go
           go mod tidy
-          cd ../../../..
       - name: Get branch name
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: |
+          cd ${{env.working-directory}}/protorepo
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: get_branch
+      - name: Ensure branch exists on remote repository
+        env:
+          branch: dev-${{ steps.get_branch.outputs.branch }}
+        run: |
+          cd ${{env.working-directory}}/protorepo-jagw-go
+          (git show-branch ${{env.branch}} &>/dev/null) && (git checkout ${{env.branch}}) && (git push origin ${{env.branch}})
       - name: Push
         uses: cpina/github-action-push-to-another-repository@main
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: 'jagw/github.com/jalapeno-api-gateway/protobuf/'
+          source-directory: ${{env.working-directory}}/protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/
           destination-github-username: 'jalapeno-api-gateway'
           destination-repository-name: 'protorepo-jagw-go'
           user-email: michel_bongard@hotmail.com
