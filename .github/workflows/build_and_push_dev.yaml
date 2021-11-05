@@ -66,4 +66,4 @@ jobs:
           cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
           git add .
           git commit -am "updating protobuf definitions"
-          git push "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git"
+          git push "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git" --force
