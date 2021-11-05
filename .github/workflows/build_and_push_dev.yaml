@@ -10,7 +10,7 @@ on:
 jobs:
   build-go:
     env:
-      working-directory: /temp/go
+      working-directory: /home/runner/work/protorepo
     runs-on: ubuntu-latest
     steps:
       - name: Checkout protorepo
