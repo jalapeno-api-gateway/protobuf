@@ -50,21 +50,13 @@ jobs:
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           cd ..
         id: get_branch
-      - name: Ensure branch exists on remote repository
-        env:
-          branch: dev-${{ steps.get_branch.outputs.branch }}
+      - name: Push
         run: |
           cd protorepo-jagw-go
-          (git show-branch ${{env.branch}} &>/dev/null) && (git checkout ${{env.branch}}) && (git push origin ${{env.branch}})
-          cd ..
-      - name: Push
-        uses: cpina/github-action-push-to-another-repository@main
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/
-          destination-github-username: 'jalapeno-api-gateway'
-          destination-repository-name: 'protorepo-jagw-go'
-          user-email: michel_bongard@hotmail.com
-          target-branch: dev-${{ steps.get_branch.outputs.branch }}
-          commit-message: 'updating protobuf definitions'
+          git init
+          git remote add deploy "git@github.com/jalapeno-api-gateway/protorepo-jagw-go"
+          git checkout -b dev-${{ steps.get_branch.outputs.branch }}
+          cp ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
+          git add .
+          git commit -am "updating protobuf definitions"
+          git push deploy dev-${{ steps.get_branch.outputs.branch }} --force
