@@ -20,6 +20,7 @@ jobs:
         with:
           repository: jalapeno-api-gateway/protorepo-jagw-go
           path: protorepo-jagw-go
+          token: ${{secrets.API_TOKEN_ALLOW_ALL}}
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17.2'
@@ -50,17 +51,12 @@ jobs:
           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
           cd ..
         id: get_branch
-      - name: Set Github credentials
-        uses: oleksiyrudenko/gha-git-credentials@v2.1
-        with:
-          global: true
-          name: 'mbongard'
-          email: 'michel_bongard@hotmail.com'
-          token: '${{ secrets.API_TOKEN_ALLOW_ALL }}'
       - name: Push
         run: |
           cd protorepo-jagw-go
           git init
+          git config --local user.name "Github Action"
+          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git remote add deploy "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
           cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
