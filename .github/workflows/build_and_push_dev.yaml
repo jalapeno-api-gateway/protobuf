@@ -65,4 +65,6 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          repository: jalapeno-api-gateway/protorepo-jagw-go
           branch: dev-${{ steps.get_branch.outputs.branch }}
+          force: true
