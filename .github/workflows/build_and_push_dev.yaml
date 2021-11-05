@@ -56,15 +56,9 @@ jobs:
           git init
           git config user.email "michel_bongard@hotmail.com"
           git config user.name "mbongard"
-          git remote add deploy "https://mbongard:github.com/jalapeno-api-gateway/protorepo-jagw-go"
+          git remote add deploy "https://github.com/jalapeno-api-gateway/protorepo-jagw-go"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
           cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
           git add .
           git commit -am "updating protobuf definitions"
-      - name: Push
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          repository: protorepo-jagw-go
-          branch: dev-${{ steps.get_branch.outputs.branch }}
-          force: true
+          git push https://mbongard:${{ secrets.GITHUB_TOKEN }}@github.com/jalapeno-api-gateway/protorepo-jagw-go.git
