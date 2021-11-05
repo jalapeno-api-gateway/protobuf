@@ -16,12 +16,12 @@ jobs:
       - name: Checkout protorepo
         uses: actions/checkout@v2
         with:
-          path: ${{env.working-directory}}/protorepo
+          path: protorepo
       - name: Checkout protorepo-jagw-go
         uses: actions/checkout@v2
         with:
           repository: jalapeno-api-gateway/protorepo-jagw-go
-          path: ${{env.working-directory}}/protorepo-jagw-go
+          path: protorepo-jagw-go
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17.2'
