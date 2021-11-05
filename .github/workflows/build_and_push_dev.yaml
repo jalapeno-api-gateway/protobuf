@@ -57,13 +57,15 @@ jobs:
           name: 'mbongard'
           email: 'michel_bongard@hotmail.com'
           token: '${{ secrets.API_TOKEN_ALLOW_ALL  }}'
-      - name: Push
+      - name: Prepare remote repo
         run: |
           cd protorepo-jagw-go
           git init
           git remote add deploy "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
           cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
-          git add .
-          git commit -am "updating protobuf definitions"
-          git push "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git" --force
+      - name: Push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: update protobuf definitions
+          push_options: --force
