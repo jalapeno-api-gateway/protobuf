@@ -56,7 +56,7 @@ jobs:
           global: true
           name: 'mbongard'
           email: 'michel_bongard@hotmail.com'
-          token: '${{ secrets.GITHUB_TOKEN  }}'
+          token: '${{ secrets.API_TOKEN_ALLOW_ALL  }}'
       - name: Push
         run: |
           cd protorepo-jagw-go
