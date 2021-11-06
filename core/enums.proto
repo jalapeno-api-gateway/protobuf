@@ -1,0 +1,7 @@
+syntax = "proto2";
+package jagw;
+
+enum StringOperator {
+    EQUAL = 1;
+    NOT_EQUAL = 2;
+}
