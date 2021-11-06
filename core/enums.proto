@@ -1,6 +1,8 @@
 syntax = "proto2";
 package jagw;
 
+option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
+
 enum StringOperator {
     EQUAL = 1;
     NOT_EQUAL = 2;
