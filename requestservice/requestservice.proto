@@ -24,12 +24,18 @@ message TelemetryRequest {
     required string sensor_path = 1;
     repeated string properties = 2;
     repeated StringFilter string_filters = 3;
+    optional RangeFilter range_filter = 4;
 }
 
 message StringFilter {
     required string property = 1;
     required string value = 2;
     required StringOperator operator = 3;
+}
+
+message RangeFilter {
+    required int64 earliest_timestamp = 3;
+    optional int64 latest_timestamp = 4;    
 }
 
 message LsNodeResponse {
