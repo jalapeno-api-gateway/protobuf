@@ -15,12 +15,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: protorepo
-      - name: Checkout protorepo-jagw-go
-        uses: actions/checkout@v2
-        with:
-          repository: jalapeno-api-gateway/protorepo-jagw-go
-          path: protorepo-jagw-go
-          token: ${{secrets.API_TOKEN_ALLOW_ALL}}
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17.2'
@@ -53,13 +47,14 @@ jobs:
         id: get_branch
       - name: Push
         run: |
+          mkdir protorepo-jagw-go
           cd protorepo-jagw-go
           git init
           git config --local user.name "Github Action"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git remote add deploy "https://github.com/jalapeno-api-gateway/protorepo-jagw-go.git"
           git checkout -b dev-${{ steps.get_branch.outputs.branch }}
-          cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/ .
+          cp -r ../protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/* .
           git add .
           git commit -am "updating protobuf definitions"
           git push "https://github-action:${{secrets.API_TOKEN_ALLOW_ALL}}@github.com/jalapeno-api-gateway/protorepo-jagw-go.git" --force
