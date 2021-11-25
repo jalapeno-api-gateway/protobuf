@@ -22,7 +22,7 @@ message TopologyRequest {
 }
 
 message LsNodeCoordinatesRequest {
-    repeated string lsnode_keys = 1;
+    repeated string ls_node_keys = 1;
 }
 
 message TelemetryRequest {
