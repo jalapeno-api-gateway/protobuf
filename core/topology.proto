@@ -105,7 +105,9 @@ message LsNodeEdge {
 }
 
 message LsNodeCoordinates {
-	required string ls_node_key = 1;
-	required double latitude = 2;
-	required double longitude = 3;
+	required string key = 1;
+	optional string id = 2;
+	required string ls_node_key = 3;
+	required double latitude = 4;
+	required double longitude = 5;
 }
