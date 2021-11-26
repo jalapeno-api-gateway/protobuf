@@ -103,3 +103,11 @@ message LsNodeEdge {
 	optional string to = 4;
 	optional string link = 5;
 }
+
+message LsNodeCoordinates {
+	required string key = 1;
+	optional string id = 2;
+	required string ls_node_key = 3;
+	required double latitude = 4;
+	required double longitude = 5;
+}
