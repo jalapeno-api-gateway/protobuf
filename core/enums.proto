@@ -7,8 +7,3 @@ enum StringOperator {
     EQUAL = 1;
     NOT_EQUAL = 2;
 }
-
-enum InfluxType {
-    TAG = 1;
-    FIELD = 2;
-}

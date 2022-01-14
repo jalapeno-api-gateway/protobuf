@@ -32,7 +32,7 @@ message Measurement {
 message MeasurementColumn {
     required string name = 1;
     required string type = 2;
-    required InfluxType influx_type = 3;
+    required string influx_type = 3;
 }
 
 message TopologyRequest {
