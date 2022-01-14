@@ -61,8 +61,6 @@ jobs:
         run: npm install -g grpc-tools
       - name: Build
         run: |
-          go version
-          ls -a
           mkdir -p jagw
           grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw $(find . -iname "*.proto")
       - name: Create README
