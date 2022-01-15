@@ -15,6 +15,7 @@ service RequestService {
     rpc GetLsNodeCoordinates(LsNodeCoordinatesRequest) returns (LsNodeCoordinatesResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
     rpc GetMeasurements(MeasurementsRequest) returns (MeasurementsResponse) {}
+    rpc GetMeasurementDetails(MeasurementDetailsRequest) returns (MeasurementDetailsResponse) {}
 }
 
 message MeasurementsRequest {}
@@ -25,14 +26,23 @@ message MeasurementsResponse {
 
 message Measurement {
     required string name = 1;
+    required int64 timestamp_latest_measurement = 2;
+}
+
+message MeasurementDetailsRequest {
+    required string name = 1;
+}
+
+message MeasurementDetailsResponse {
+    required int64 timestamp_latest_measurement = 1;
     repeated MeasurementColumn columns = 2;
-    required int64 timestamp_latest_measurement = 3;
 }
 
 message MeasurementColumn {
     required string name = 1;
     required string type = 2;
     required string influx_type = 3;
+    required string last_value = 4;
 }
 
 message TopologyRequest {
