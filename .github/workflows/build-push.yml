@@ -64,11 +64,12 @@ jobs:
           echo "------------> ls /usr"
           ls -a /usr
           echo "------------> ls /usr/local"
-          ls -a /usr/local
-          echo "------------> pwd"
-          pwd
-          echo "------------> ls /"
-          ls /
+          ls -a /usr/local          
+          echo "------------> ls /usr/local/bin"
+          ls -a /usr/local/bin
+          sudo mv protoc-gen-grpc-web-1.3.0-darwin-x86_64 /usr/local/bin/protoc-gen-grpc-web
+          chmod +x /usr/local/bin/protoc-gen-grpc-web
+          ls -a /usr/local/bin
       - name: Install node compiler for gRPC
         run: npm i grpc-web google-protobuf
       - name: Build
