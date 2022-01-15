@@ -57,14 +57,17 @@ jobs:
       - uses: arduino/setup-protoc@v1.1.2
         with:
           version: '3.6.1'
+      - name: Install protoc-gen-grpc-web
+        run: |
+          wget https://github.com/grpc/grpc-web/releases/download/1.3.0/protoc-gen-grpc-web-1.3.0-linux-x86_64
+          sudo mv protoc-gen-grpc-web-1.3.0-linux-x86_64 /usr/local/bin/protoc-gen-grpc-web
+          chmod +x /usr/local/bin/protoc-gen-grpc-web
       - name: Install node compiler for gRPC
-        run: npm install -g grpc-tools
+        run: npm i grpc-web google-protobuf
       - name: Build
         run: |
-          go version
-          ls -a
           mkdir -p jagw
-          grpc_tools_node_protoc --js_out=import_style=commonjs,binary:jagw --grpc_out=grpc_js:jagw $(find . -iname "*.proto")
+          protoc --js_out=import_style=commonjs,binary:jagw --grpc-web_out=import_style=typescript,mode=grpcwebtext:jagw $(find . -iname "*.proto")
       - name: Create README
         run: |
           echo "# protorepo-jagw-node" >> jagw/README.md
