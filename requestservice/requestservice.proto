@@ -42,7 +42,7 @@ message MeasurementColumn {
     required string name = 1;
     required string type = 2;
     required string influx_type = 3;
-    required string last_value = 4;
+    required string last_value_stringyfied = 4;
 }
 
 message TopologyRequest {
