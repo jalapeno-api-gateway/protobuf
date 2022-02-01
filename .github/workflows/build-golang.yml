@@ -1,13 +1,11 @@
-name: build_and_push
+name: build_golang
 
 on:
-  push:
-    branches: [ main ]
-
-  workflow_dispatch:
-
+  release:
+    types: [published]
+  
 jobs:
-  build-go:
+  build-push-golang:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -47,39 +45,18 @@ jobs:
           user-email: michel_bongard@hotmail.com
           target-branch: main
           commit-message: 'updating protobuf definitions'
-  build-node:
+  release-golang:
+    needs: build-push-golang
+    name: Create Release for golang
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          node-version: '14'
-      - uses: arduino/setup-protoc@v1.1.2
-        with:
-          version: '3.17.3'
-      - name: Install protoc-gen-grpc-web
-        run: |
-          wget https://github.com/grpc/grpc-web/releases/download/1.3.0/protoc-gen-grpc-web-1.3.0-linux-x86_64
-          sudo mv protoc-gen-grpc-web-1.3.0-linux-x86_64 /usr/local/bin/protoc-gen-grpc-web
-          chmod +x /usr/local/bin/protoc-gen-grpc-web
-      - name: Install node compiler for gRPC
-        run: npm i grpc-web google-protobuf
-      - name: Build
-        run: |
-          mkdir -p jagw
-          protoc --js_out=import_style=commonjs,binary:jagw --grpc-web_out=import_style=typescript,mode=grpcwebtext:jagw $(find . -iname "*.proto")
-      - name: Create README
-        run: |
-          echo "# protorepo-jagw-node" >> jagw/README.md
-          echo "This repository contains the compiled code for the Jalapeño API Gateway for **node**." >> jagw/README.md
-      - name: Push
-        uses: cpina/github-action-push-to-another-repository@main
+          repository: 'jalapeno-api-gateway/protorepo-jagw-go'
+          token: ${{ secrets.API_TOKEN_ALLOW_ALL }}
         env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-        with:
-          source-directory: 'jagw/'
-          destination-github-username: 'jalapeno-api-gateway'
-          destination-repository-name: 'protorepo-jagw-node'
-          user-email: michel_bongard@hotmail.com
-          target-branch: main
-          commit-message: 'updating protobuf definitions'
+          GITHUB_REPOSITORY: 'jalapeno-api-gateway/protorepo-jagw-go'
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN_ALLOW_ALL }}

@@ -1,4 +1,4 @@
-name: build_and_push_dev
+name: build_golang_dev
 
 on:
   push:
