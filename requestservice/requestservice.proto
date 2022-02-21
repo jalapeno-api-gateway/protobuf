@@ -59,6 +59,7 @@ message TelemetryRequest {
     repeated string properties = 2;
     repeated StringFilter string_filters = 3;
     optional RangeFilter range_filter = 4;
+    optional bool Unflatten = 5;
 }
 
 message StringFilter {
