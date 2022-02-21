@@ -8,8 +8,3 @@ message MultiTopologyIdentifier {
     required bool a_flag = 2;
     required uint32 mtid = 3; // protobuf does not support uint16
 }
-
-message InterfaceIdentifier {
-    required string hostname = 1;
-    required int32 link_id = 2;
-}

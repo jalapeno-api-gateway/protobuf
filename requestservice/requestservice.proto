@@ -4,7 +4,7 @@ package jagw;
 option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
 
 import "core/topology.proto";
-import "core/enums.proto";
+import "core/filters.proto";
 
 service RequestService {
     rpc GetLsNodes(TopologyRequest) returns (LsNodeResponse) {}
@@ -60,17 +60,6 @@ message TelemetryRequest {
     repeated StringFilter string_filters = 3;
     optional RangeFilter range_filter = 4;
     optional bool Unflatten = 5;
-}
-
-message StringFilter {
-    required string property = 1;
-    required string value = 2;
-    required StringOperator operator = 3;
-}
-
-message RangeFilter {
-    required int64 earliest_timestamp = 3;
-    optional int64 latest_timestamp = 4;    
 }
 
 message LsNodeResponse {
