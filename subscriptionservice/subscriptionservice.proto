@@ -23,9 +23,8 @@ message TopologySubscription {
 message TelemetrySubscription {
     required string sensor_path = 1;
     repeated string properties = 2;
-    repeated StringFilter string_filters = 3;
-    optional RangeFilter range_filter = 4;
-    optional bool Unflatten = 5;
+    optional bool Unflatten = 3;
+    repeated StringFilter string_filters = 4;
 }
 
 message LsNodeEvent {
