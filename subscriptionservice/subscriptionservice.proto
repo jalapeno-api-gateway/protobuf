@@ -58,5 +58,5 @@ message LsNodeEdgeEvent {
 }
 
 message TelemetryEvent {
-    repeated string telemetry_data = 1;
+    required string telemetry_data = 1;
 }
