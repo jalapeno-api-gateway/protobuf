@@ -17,7 +17,7 @@ service SubscriptionService {
 
 message TopologySubscription {
     repeated string keys = 1;
-    repeated string property_names = 2;
+    repeated string properties = 2;
 }
 
 message TelemetrySubscription {
