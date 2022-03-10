@@ -1,0 +1,35 @@
+on:
+  push:
+    branch:
+      - dev
+    tags:
+      - 'v*'
+
+name: Create Release
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: dev
+      - name: Merge dev -> main
+        uses: devmasx/merge-branch@v1.4.0
+        with:
+          type: now
+          target_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: The release notes can be found in the official [documentation](https://jalapeno-api-gateway.github.io/jagw-docs/).
+          prerelease: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+          draft: false
