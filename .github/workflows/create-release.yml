@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - dev
     tags:
       - 'v*'
 
@@ -7,7 +9,6 @@ name: Create Release
 
 jobs:
   build:
-    if: github.event.base_ref == 'refs/heads/dev'
     name: Create Release
     runs-on: ubuntu-latest
     steps:
