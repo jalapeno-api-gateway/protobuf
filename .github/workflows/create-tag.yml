@@ -3,7 +3,7 @@ name: Create Tag
 on: 
   workflow_call:
     inputs:
-      branch:
+      build_branch:
         description: 'Name of the branch to create the tag on'
         type: string
         required: true
@@ -18,23 +18,13 @@ jobs:
     outputs:
       tag: ${{ steps.build-tag-name.outputs.tag_name}}
     steps:
-      - name: Validate Input
-        if: |
-          !((inputs.branch == 'main' && ( github.event.inputs.release_type == 'major' || github.event.inputs.release_type == 'minor' || github.event.inputs.release_type == 'patch')) ||
-          (inputs.branch == 'dev' && github.event.inputs.release_type == 'dev'))
-        run: |
-          echo "PROVIDED ARGS: ${{ inputs.branch }}, ${{ github.event.inputs.release_type }}
-          echo "Invalid input. Provide one of the following combinations:"
-          echo "branch: main, release_type: major | minor | patch"
-          echo "branch: dev, release_type: dev"
-          exit 1
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.branch }}  
+          ref: ${{ inputs.build_branch }}  
           fetch-depth: 0
       - name: Install semver tool
-        if: ${{ inputs.branch }} == 'main'
+        if: ${{ inputs.build_branch }} == 'main'
         run: |
           wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
           chmod +x /usr/local/bin/semver
@@ -42,7 +32,7 @@ jobs:
         id: build-tag-name
         shell: bash
         run: |
-          if [[ ${{ inputs.branch }} == "main" ]]
+          if [[ ${{ inputs.build_branch }} == "main" ]]
           then
             PREV_RELEASE=$(git tag | grep -x -E 'v([0-9]+\.){2}[0-9]+' | sort --version-sort | tail -n 1)
             echo "::set-output name=tag_name::v$(semver bump ${{ github.event.inputs.release_type }} $PREV_RELEASE)"

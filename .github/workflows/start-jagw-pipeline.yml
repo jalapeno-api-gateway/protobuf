@@ -22,7 +22,7 @@ jobs:
   set-envs:
     runs-on: ubuntu-latest
     outputs:
-      branch: ${{ steps.set-envs.outputs.branch }}
+      build_branch: ${{ steps.set-envs.outputs.build_branch }}
       release_or_dev: ${{ steps.set-envs.outputs.release_or_dev }}
     steps:
       - name: Set envs
@@ -30,14 +30,15 @@ jobs:
         run: |
           if [[ ${{ github.event.inputs.release_type }} == "dev" ]]
           then
-            echo "::set-output name=branch::dev"
+            echo "::set-output name=build_branch::dev"
             echo "::set-output name=release_or_dev::dev"
           else
-            echo "::set-output name=branch::main"
+            echo "::set-output name=build_branch::main"
             echo "::set-output name=release_or_dev::release"
           fi
   call-merge-to-main:
-    if: github.event.inputs.release_type == 'release'
+    needs: set-envs
+    if: needs.set-envs.outputs.release_or_dev == 'release'
     uses: jalapeno-api-gateway/protorepo/.github/workflows/merge-to-main.yml@dev
   call-create-tag:
     needs: [set-envs, call-merge-to-main]
@@ -49,7 +50,7 @@ jobs:
       needs.set-envs.result == 'success'
     uses: jalapeno-api-gateway/protorepo/.github/workflows/create-tag.yml@dev
     with:
-      branch: ${{ needs.set-envs.outputs.branch }}
+      build_branch: ${{ needs.set-envs.outputs.build_branch }}
   call-build-push-go:
     needs: [set-envs, call-create-tag]
     # This job has an indirect dependency to call-merge-to-main
@@ -62,7 +63,7 @@ jobs:
       needs.call-create-tag.result == 'success'
     uses: jalapeno-api-gateway/protorepo/.github/workflows/build-push-go.yml@dev
     with:
-      build_branch: ${{ needs.set-envs.outputs.branch }}
+      build_branch: ${{ needs.set-envs.outputs.build_branch }}
       tag_name: ${{ needs.call-create-tag.outputs.tag }}
     secrets:
       pat_full_repo_access: ${{ secrets.PAT_FULL_REPO_ACCESS }}
@@ -90,7 +91,7 @@ jobs:
       repo_name: protorepo-jagw-go
       workflow_file: jagw-pipeline.yml
       tag_name: ${{ needs.call-create-tag.outputs.tag }}
-      build_branch: ${{ needs.set-envs.outputs.branch }}
+      build_branch: ${{ needs.set-envs.outputs.build_branch }}
       release_or_dev: ${{ needs.set-envs.outputs.release_or_dev }}
     secrets:
       pat_full_repo_access: ${{ secrets.PAT_FULL_REPO_ACCESS }}

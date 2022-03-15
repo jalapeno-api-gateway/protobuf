@@ -20,7 +20,7 @@ on:
         type: string
         required: true
       release_or_dev:
-        description: "dev | release"
+        description: "Type (dev | release)"
         type: string
         required: true
     secrets:
