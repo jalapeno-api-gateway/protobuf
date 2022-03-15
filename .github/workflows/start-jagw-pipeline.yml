@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       branch: ${{ steps.set-envs.outputs.branch }}
-      type: ${{ steps.set-envs.outputs.type }}
+      release_or_dev: ${{ steps.set-envs.outputs.release_or_dev }}
     steps:
       - name: Set envs
         id: set-envs
@@ -31,10 +31,10 @@ jobs:
           if [[ ${{ github.event.inputs.release_type }} == "dev" ]]
           then
             echo "::set-output name=branch::dev"
-            echo "::set-output name=type::dev"
+            echo "::set-output name=release_or_dev::dev"
           else
             echo "::set-output name=branch::main"
-            echo "::set-output name=type::release"
+            echo "::set-output name=release_or_dev::release"
           fi
   call-merge-to-main:
     if: github.event.inputs.release_type == 'release'
@@ -91,6 +91,6 @@ jobs:
       workflow_file: jagw-pipeline.yml
       tag_name: ${{ needs.call-create-tag.outputs.tag }}
       build_branch: ${{ needs.set-envs.outputs.branch }}
-      type: ${{ needs.set-envs.outputs.type }}
+      release_or_dev: ${{ needs.set-envs.outputs.release_or_dev }}
     secrets:
       pat_full_repo_access: ${{ secrets.PAT_FULL_REPO_ACCESS }}
