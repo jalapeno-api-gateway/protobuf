@@ -1,0 +1,45 @@
+name: Trigger Remote Repo
+
+on: 
+  workflow_call:
+    inputs:
+      repo_name:
+        description: "Name of the repo to trigger the workflow on"
+        type: string
+        required: true
+      workflow_file:
+        description: "Name of the workflow file to trigger"
+        type: string
+        required: true
+      tag_name:
+        description: "Name of the current tag"
+        type: string
+        required: true      
+      build_branch:
+        description: "Name of the build branch (dev | main)"
+        type: string
+        required: true
+      type:
+        description: "dev | release"
+        type: string
+        required: true
+    secrets:
+      pat_full_repo_access:
+        description: "A GitHub token with full repo access."
+        required: true
+  
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: convictional/trigger-workflow-and-wait@v1.6.0
+        with:
+          owner: jalapeno-api-gateway
+          repo: ${{ inputs.repo_name }}
+          github_token: ${{ secrets.pat_full_repo_access }}
+          github_user: mbongard
+          workflow_file_name: ${{ inputs.workflow_file }}
+          ref: main
+          client_payload: '{"tag_name": "${{ inputs.tag_name }}", "build_branch": "${{ inputs.build_branch }}", "type": "${{ inputs.type }}"}'
+          propagate_failure: false
+          wait_workflow: false

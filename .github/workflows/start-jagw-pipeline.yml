@@ -1,0 +1,96 @@
+name: Start JAGW Pipeline
+
+on: 
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Type of release'     
+        required: true
+        default: dev
+        type: choice
+        options:
+        - dev
+        - patch
+        - minor
+        # - major (making a major release requires a lot of tweaking to the pipeline,
+        # since go modules have to handle versioning differently for versions v2 or higher.
+        # This is very annoying, see:
+        # - https://stackoverflow.com/questions/55096443/how-to-upgrade-go-mod-to-v2-or-higher-version
+        # - https://github.com/golang/go/wiki/Modules#semantic-import-versioning
+        
+jobs:  
+  set-envs:
+    runs-on: ubuntu-latest
+    outputs:
+      branch: ${{ steps.set-envs.outputs.branch }}
+      type: ${{ steps.set-envs.outputs.type }}
+    steps:
+      - name: Set envs
+        id: set-envs
+        run: |
+          if [[ ${{ github.event.inputs.release_type }} == "dev" ]]
+          then
+            echo "::set-output name=branch::dev"
+            echo "::set-output name=type::dev"
+          else
+            echo "::set-output name=branch::main"
+            echo "::set-output name=type::release"
+          fi
+  call-merge-to-main:
+    if: github.event.inputs.release_type == 'release'
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/merge-to-main.yml@dev
+  call-create-tag:
+    needs: [set-envs, call-merge-to-main]
+    # call-merge-to-main may be skipped, but this job still needs to run.
+    # We do this with the following if statement:
+    if: |
+      always() &&
+      (needs.call-merge-to-main.result == 'success' || needs.call-merge-to-main.result == 'skipped') &&
+      needs.set-envs.result == 'success'
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/create-tag.yml@dev
+    with:
+      branch: ${{ needs.set-envs.outputs.branch }}
+  call-build-push-go:
+    needs: [set-envs, call-create-tag]
+    # This job has an indirect dependency to call-merge-to-main
+    # call-merge-to-main may be skipped, but this job still needs to run.
+    # We do this with the following if statement:
+    if: |
+      always() &&
+      (needs.call-merge-to-main.result == 'success' || needs.call-merge-to-main.result == 'skipped') &&
+      needs.set-envs.result == 'success' &&
+      needs.call-create-tag.result == 'success'
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/build-push-go.yml@dev
+    with:
+      build_branch: ${{ needs.set-envs.outputs.branch }}
+      tag_name: ${{ needs.call-create-tag.outputs.tag }}
+    secrets:
+      pat_full_repo_access: ${{ secrets.PAT_FULL_REPO_ACCESS }}
+  call-create-release:
+    needs: [call-merge-to-main, call-create-tag]
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/create-release.yml@dev
+    with:
+      tag_name: ${{ needs.call-create-tag.outputs.tag }}
+  call-build-nodejs-artifacts:
+    needs: [call-create-tag, call-create-release]
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/build-nodejs-artifacts.yml@dev
+    with:
+      tag_name: ${{ needs.call-create-tag.outputs.tag }}
+      upload_url: ${{ needs.call-create-release.outputs.upload_url }}  
+  call-trigger-remote-repo:
+    needs: [set-envs, call-build-push-go, call-create-tag]
+    if: |
+      always() &&
+      (needs.call-merge-to-main.result == 'success' || needs.call-merge-to-main.result == 'skipped') &&
+      needs.set-envs.result == 'success' && 
+      needs.call-create-tag.result == 'success' &&
+      needs.call-build-push-go.result == 'success'
+    uses: jalapeno-api-gateway/protorepo/.github/workflows/trigger-remote-repo.yml@dev
+    with:
+      repo_name: protorepo-jagw-go
+      workflow_file: jagw-pipeline.yml
+      tag_name: ${{ needs.call-create-tag.outputs.tag }}
+      build_branch: ${{ needs.set-envs.outputs.branch }}
+      type: ${{ needs.set-envs.outputs.type }}
+    secrets:
+      pat_full_repo_access: ${{ secrets.PAT_FULL_REPO_ACCESS }}

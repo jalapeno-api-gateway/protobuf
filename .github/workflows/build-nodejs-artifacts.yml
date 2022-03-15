@@ -1,23 +1,31 @@
-name: build_artifacts
+name: Build NodeJS Artifacts
 
 on:
-  release:
-    types: [published]
+  workflow_call:
+    inputs:
+      tag_name:
+        description: 'Tag name of release'
+        type: string
+        required: true
+      upload_url:
+        description: 'Upload URL of release'
+        type: string
+        required: true
 
 jobs:
-  nodejs:
+  build-nodejs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Get release
-        id: get_release
-        uses: bruceadams/get-release@v1.2.3
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - uses: arduino/setup-protoc@v1.1.2
+      - name: Setup Protoc
+        uses: arduino/setup-protoc@v1.1.2
         with:
           version: '3.17.3'
       - name: Install protoc-gen-grpc-web
@@ -31,13 +39,13 @@ jobs:
         run: |
           mkdir -p jagw
           protoc --js_out=import_style=commonjs,binary:jagw --grpc-web_out=import_style=typescript,mode=grpcwebtext:jagw $(find . -iname "*.proto")
-          zip -r nodejs-${{ steps.get_release.outputs.tag_name }}.zip jagw
+          zip -r nodejs-${{ inputs.tag_name }}.zip jagw
       - name: Upload artifacts
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: ${{ steps.get_release.outputs.upload_url }}
-          asset_path: ./nodejs-${{ steps.get_release.outputs.tag_name }}.zip
-          asset_name: nodejs-${{ steps.get_release.outputs.tag_name }}.zip
+          upload_url: ${{ inputs.upload_url }}
+          asset_path: ./nodejs-${{ inputs.tag_name }}.zip
+          asset_name: nodejs-${{ inputs.tag_name }}.zip
           asset_content_type: application/zip
