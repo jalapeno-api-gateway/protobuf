@@ -19,7 +19,7 @@ on:
         description: "Name of the build branch (dev | main)"
         type: string
         required: true
-      release_type:
+      release_or_dev:
         description: "dev | release"
         type: string
         required: true
@@ -40,6 +40,6 @@ jobs:
           github_user: mbongard
           workflow_file_name: ${{ inputs.workflow_file }}
           ref: main
-          client_payload: '{"tag_name": "${{ inputs.tag_name }}", "build_branch": "${{ inputs.build_branch }}", "release_type": "${{ inputs.release_type }}"}'
+          client_payload: '{"tag_name": "${{ inputs.tag_name }}", "build_branch": "${{ inputs.build_branch }}", "release_or_dev": "${{ inputs.release_or_dev }}"}'
           propagate_failure: false
           wait_workflow: false
