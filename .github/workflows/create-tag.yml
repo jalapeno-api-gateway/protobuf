@@ -1,0 +1,57 @@
+name: Create Tag
+
+on: 
+  workflow_call:
+    inputs:
+      build_branch:
+        description: 'Name of the branch to create the tag on'
+        type: string
+        required: true
+    outputs:
+      tag:
+        description: 'Name of the created tag'
+        value: ${{ jobs.create-tag.outputs.tag }}
+ 
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.build-tag-name.outputs.tag_name}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.build_branch }}  
+          fetch-depth: 0
+      - name: Install semver tool
+        if: ${{ inputs.build_branch }} == 'main'
+        run: |
+          wget -O /usr/local/bin/semver https://raw.githubusercontent.com/fsaintjacques/semver-tool/master/src/semver
+          chmod +x /usr/local/bin/semver
+      - name: Build tag name
+        id: build-tag-name
+        shell: bash
+        run: |
+          if [[ ${{ inputs.build_branch }} == "main" ]]
+          then
+            PREV_RELEASE=$(git tag | grep -x -E 'v([0-9]+\.){2}[0-9]+' | sort --version-sort | tail -n 1)
+            echo "::set-output name=tag_name::v$(semver bump ${{ github.event.inputs.release_type }} $PREV_RELEASE)"
+          else
+            echo "::set-output name=tag_name::dev-${{ github.run_number }}"
+          fi
+      - name: Echo tag name
+        run: |
+          echo "Generated Tag: ${{ steps.build-tag-name.outputs.tag_name }}"
+      - name: Create tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const { TAG_NAME } = process.env
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `refs/tags/${ TAG_NAME }`,
+              sha: context.sha
+            })
+        env:
+          TAG_NAME: "${{ steps.build-tag-name.outputs.tag_name }}"

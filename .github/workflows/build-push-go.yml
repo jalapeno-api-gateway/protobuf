@@ -1,0 +1,72 @@
+name: Build & Push Golang
+
+on:
+  workflow_call:
+    inputs:
+      tag_name:
+        description: 'Branch to build'
+        type: string
+        required: true
+      build_branch:
+        description: 'Branch to build'
+        type: string
+        required: true
+    secrets:
+      pat_full_repo_access:
+        description: "A GitHub token with full repo access."
+        required: true
+
+jobs:
+  build-push-go:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.build_branch }}
+          path: protorepo
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: jalapeno-api-gateway/protorepo-jagw-go
+          path: protorepo-jagw-go
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.2'
+      - uses: arduino/setup-protoc@v1.1.2
+        with:
+          version: '3.6.1'
+      - name: Install go compiler for gRPC
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
+          export PATH="$PATH:$(go env GOPATH)/bin"
+      - name: Build
+        run: |
+          cd protorepo
+          mkdir -p jagw
+          protoc --proto_path=. --go_out=./jagw --go_opt=paths=import --go-grpc_out=./jagw --go-grpc_opt=paths=import **/*.proto
+      - name: Initialize Module
+        run: |
+          cd protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/
+          go mod init github.com/jalapeno-api-gateway/protorepo-jagw-go
+          go mod tidy
+      - name: Create README
+        run: |
+          cd protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/
+          echo "# protorepo-jagw-go" >> README.md
+          echo "This repository contains the compiled code for the Jalapeño API Gateway for **golang**." >> README.md
+      - name: Copy existing workflow files
+        run: cp -r protorepo-jagw-go/.github protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/.github
+      - name: Push
+        uses: cpina/github-action-push-to-another-repository@v1.4.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.pat_full_repo_access }}
+        with:
+          source-directory: 'protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/'
+          destination-github-username: 'jalapeno-api-gateway'
+          destination-repository-name: 'protorepo-jagw-go'
+          user-name: 'github-actions[bot]'
+          user-email: 'github-actions[bot]@users.noreply.github.com'
+          target-branch: main
+          commit-message: 'Update protobuf'
