@@ -29,4 +29,4 @@ jobs:
         with:
           tag_name: ${{ inputs.tag_name }}
           release_name: ${{ inputs.tag_name }}
-          body: The release notes can be found in the official [documentation](https://jalapeno-api-gateway.github.io/jagw-docs/).
+          body: The release notes can be found in the official [documentation](https://jalapeno-api-gateway.github.io/jagw-docs/docs/release-notes/).
