@@ -111,3 +111,11 @@ message LsNodeCoordinates {
 	required double latitude = 4;
 	required double longitude = 5;
 }
+
+message Peer{
+	required string key = 1;
+	optional string id = 2;
+	optional string router_hash = 3;
+	optional string remote_bgp_id = 4;
+	optional string local_bgp_id = 5;
+}

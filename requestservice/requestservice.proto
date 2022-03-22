@@ -12,6 +12,7 @@ service RequestService {
     rpc GetLsPrefixes(TopologyRequest) returns (LsPrefixResponse) {}
     rpc GetLsSrv6Sids(TopologyRequest) returns (LsSrv6SidResponse) {}
     rpc GetLsNodeEdges(TopologyRequest) returns (LsNodeEdgeResponse) {}
+    rpc GetPeers(TopologyRequest) returns (PeerResponse) {}
     rpc GetLsNodeCoordinates(LsNodeCoordinatesRequest) returns (LsNodeCoordinatesResponse) {}
     rpc GetTelemetryData(TelemetryRequest) returns (TelemetryResponse) {}
     rpc GetMeasurements(MeasurementsRequest) returns (MeasurementsResponse) {}
@@ -84,6 +85,10 @@ message LsNodeEdgeResponse {
 
 message LsNodeCoordinatesResponse {
     repeated LsNodeCoordinates coordinates = 1;
+}
+
+message PeerResponse {
+    repeated Peer peer = 1;
 }
 
 message TelemetryResponse {

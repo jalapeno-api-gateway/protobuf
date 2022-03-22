@@ -12,6 +12,7 @@ service SubscriptionService {
     rpc SubscribeToLsPrefixes(TopologySubscription) returns (stream LsPrefixEvent) {}
     rpc SubscribeToLsSrv6Sids(TopologySubscription) returns (stream LsSrv6SidEvent) {}
     rpc SubscribeToLsNodeEdges(TopologySubscription) returns (stream LsNodeEdgeEvent) {}
+    rpc SubscribeToPeers(TopologySubscription) returns (stream PeerEvent) {}
     rpc SubscribeToTelemetryData(TelemetrySubscription) returns (stream TelemetryEvent) {}
 }
 
@@ -55,6 +56,12 @@ message LsNodeEdgeEvent {
     required string action = 1;
     required string key = 2;
     optional LsNodeEdge ls_node_edge = 3;
+}
+
+message PeerEvent {
+    required string action = 1;
+    required string key = 2;
+    optional Peer peer = 3;
 }
 
 message TelemetryEvent {
