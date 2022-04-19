@@ -21,10 +21,10 @@ message FlexAlgoDefinition {
 	optional uint32 calculation_type = 3;
 	optional uint32 priority = 4;
 	//optional SubTlvNode sub_tlv = 5;
-	repeated uint32 include_any = 6;
-	repeated uint32 include_all = 7;
-	repeated uint32 exclude_any = 8;
-	repeated uint32 exclude_srlg = 9;
+	repeated uint32 include_any = 5;
+	repeated uint32 include_all = 6;
+	repeated uint32 exclude_any = 7;
+	repeated uint32 exclude_srlg = 8;
 }
 
 message LsNode {
