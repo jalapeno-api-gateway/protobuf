@@ -5,6 +5,21 @@ option go_package = "github.com/jalapeno-api-gateway/protobuf/jagw;jagw";
 
 import "core/base.proto";
 
+message SubTlvNode {
+	repeated uint32 include_any = 1;
+	repeated uint32 include_all = 2;
+	repeated uint32 exclude_any = 3;
+	repeated uint32 exclude_srlg = 4;
+}
+
+message FlexAlgoDefinition {
+	required uint32 flex_algo = 1;
+	optional uint32 metric_type = 2;
+	optional uint32 calculation_type = 3;
+	optional uint32 priority = 4;
+	optional SubTlvNode sub_tlv = 5;
+}
+
 message LsNode {
 	required string key = 1;
 	optional string id = 2;
@@ -24,6 +39,17 @@ message LsNode {
 	optional string name = 16;
 	optional bool is_prepolicy = 17;
 	optional bool is_adj_rib_in = 18;
+	repeated uint32 sr_algorithm = 19;
+	repeated FlexAlgoDefinition flex_algo_definition = 20;
+}
+
+message SubTlvsLink {
+	optional uint32 sub_tlv_type = 1;
+	optional string sub_tlv_value = 2;
+}
+
+message AppSpecLinkAttr {
+	repeated SubTlvsLink sub_tlvs = 1;
 }
 
 message LsLink {
@@ -49,6 +75,7 @@ message LsLink {
 	optional string remote_node_hash = 20;
 	optional string local_node_hash = 21;
 	optional string remote_igp_router_id = 22;
+	repeated AppSpecLinkAttr app_spec_link_attr = 23;
 }
 
 message LsPrefix {
