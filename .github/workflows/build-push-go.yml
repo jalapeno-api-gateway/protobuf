@@ -20,6 +20,8 @@ jobs:
   build-push-go:
     runs-on: ubuntu-latest
     steps:
+      - name: work around permission issue
+        run: git config --system --add safe.directory '*'
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -58,8 +60,6 @@ jobs:
           echo "This repository contains the compiled code for the Jalapeño API Gateway for **golang**." >> README.md
       - name: Copy existing workflow files
         run: cp -r protorepo-jagw-go/.github protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/.github
-      - name: work around permission issue
-        run: git config --system --add safe.directory "*"
       - name: Push
         uses: cpina/github-action-push-to-another-repository@v1.4.1
         env:
