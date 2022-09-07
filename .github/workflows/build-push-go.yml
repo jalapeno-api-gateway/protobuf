@@ -60,10 +60,8 @@ jobs:
           echo "This repository contains the compiled code for the Jalapeño API Gateway for **golang**." >> README.md
       - name: Copy existing workflow files
         run: cp -r protorepo-jagw-go/.github protorepo/jagw/github.com/jalapeno-api-gateway/protobuf/.github
-      - name: work around permission issue
-        run: git config --global --add safe.directory /tmp/tmp.HnHngO
       - name: Push
-        uses: cpina/github-action-push-to-another-repository@v1.4.1
+        uses: cpina/github-action-push-to-another-repository@v1.5.1
         env:
           API_TOKEN_GITHUB: ${{ secrets.pat_full_repo_access }}
         with:
